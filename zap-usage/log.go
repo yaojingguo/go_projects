@@ -3,6 +3,7 @@ package main
 import (
 	"go.uber.org/zap"
 	"time"
+	"fmt"
 )
 
 func sugar() {
@@ -15,7 +16,10 @@ func sugar() {
 		"url", url,
 		"attempt", 3,
 		"backoff", time.Second)
-	sugar.Info("faile to fetch URL: %s", url)
+	sugar.Info("failed to fetch URL: ", url)
+	sugar.Info("one ", "two ", "three")
+	sugar.Infof("%s %s %s", "one", "two", "three")
+	fmt.Println()
 }
 
 func performant() {
@@ -28,6 +32,7 @@ func performant() {
 		zap.Int("attempt", 3),
 		zap.Duration("backoff", time.Second),
 	)
+	fmt.Println()
 }
 
 func main() {
