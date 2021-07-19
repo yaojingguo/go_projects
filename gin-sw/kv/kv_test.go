@@ -3,8 +3,9 @@ package kv
 import (
 	"context"
 	"fmt"
-	v3 "go.etcd.io/etcd/client/v3"
 	"testing"
+
+	v3 "go.etcd.io/etcd/client/v3"
 )
 
 func printGetResponse(r *v3.GetResponse) {
@@ -17,7 +18,7 @@ func printGetResponse(r *v3.GetResponse) {
 // Run beforehand:
 // 	etcdctl put TestGet 1
 func TestGet(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 
 	key := "TestGet"
@@ -33,7 +34,7 @@ func TestGet(t *testing.T) {
 // 	etcdctl put TestGetWithPrefix 1
 // 	etcdctl put TestGetWithPrefix2 2
 func TestGetWithPrefix(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 
 	keyPrefix := "TestGetWithPrefix"
@@ -42,7 +43,7 @@ func TestGetWithPrefix(t *testing.T) {
 		t.Fatal(err)
 	}
 	if response.Count != 2 {
-		t.Errorf("expected %d keys, got %d keys", 2,  response.Count)
+		t.Errorf("expected %d keys, got %d keys", 2, response.Count)
 	}
 	printGetResponse(response)
 }
@@ -51,7 +52,7 @@ func TestGetWithPrefix(t *testing.T) {
 // 	etcdctl put TestGetWithRange 1
 // 	etcdctl put TestGetWithRange2 2
 func TestGetWithRange(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 
 	response, err := cli.Get(context.Background(), "TestGetWithRange", v3.WithRange("TestGetWithRange2\x00"))
@@ -59,7 +60,7 @@ func TestGetWithRange(t *testing.T) {
 		t.Fatal(err)
 	}
 	if response.Count != 2 {
-		t.Errorf("expected %d keys, got %d keys", 2,  response.Count)
+		t.Errorf("expected %d keys, got %d keys", 2, response.Count)
 	}
 	printGetResponse(response)
 }
@@ -67,7 +68,7 @@ func TestGetWithRange(t *testing.T) {
 // Run beforehand:
 // 	etcdctl put TestGetWithSerializable 1
 func TestGetWithSerializable(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 
 	key := "TestGetWithSerializable"
@@ -76,17 +77,17 @@ func TestGetWithSerializable(t *testing.T) {
 		t.Fatal(err)
 	}
 	if response.Count != 1 {
-		t.Errorf("expected %d keys, got %d keys", 1,  response.Count)
+		t.Errorf("expected %d keys, got %d keys", 1, response.Count)
 	}
 	printGetResponse(response)
 }
 
 func TestPut(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 
 	key := "TestPut"
-	response, err := cli.Put(context.Background(), key, "1", v3.WithPrevKV())
+	response, err := cli.Put(context.Background(), key, string([]byte{0x10, 0x20}), v3.WithPrevKV())
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -97,7 +98,7 @@ func TestPut(t *testing.T) {
 // Run beforehand:
 // 	etcdctl put TestDelete 1
 func TestDelete(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 
 	key := "TestDelete"
@@ -116,7 +117,7 @@ func TestDelete(t *testing.T) {
 // Run beforehand:
 //	etcdctl put TestTxn 1
 func TestTxn(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 
 	key := "TestTxn"
@@ -153,7 +154,7 @@ func TestTxn(t *testing.T) {
 }
 
 func TestTxnOpOrder(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 	key := "TestTxnOpOrder"
 
@@ -187,7 +188,7 @@ func TestTxnOpOrder(t *testing.T) {
 }
 
 func TestTxnMultis(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 	ctx := context.Background()
 
@@ -197,7 +198,7 @@ func TestTxnMultis(t *testing.T) {
 	var puts [2]v3.Op
 	var gets [2]v3.Op
 	for i := 0; i < 2; i++ {
-		val := fmt.Sprint(i+ 1)
+		val := fmt.Sprint(i + 1)
 		cmps[i] = v3.Compare(v3.CreateRevision(keys[i]), "=", 0)
 		puts[i] = v3.OpPut(keys[i], val)
 		gets[i] = v3.OpGet(keys[i])
@@ -227,7 +228,7 @@ func TestTxnMultis(t *testing.T) {
 	}
 
 	// Execute two Deletes
-	tresp, err = cli.Txn(ctx).Then(v3.OpDelete(keys[0]), v3.OpDelete(keys[1])).Commit();
+	tresp, err = cli.Txn(ctx).Then(v3.OpDelete(keys[0]), v3.OpDelete(keys[1])).Commit()
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -249,7 +250,7 @@ func printTxnResponse(resp *v3.TxnResponse) {
 
 // version revision test
 func TestVersionAndRevision(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 	key := "TestVersionAndRevision"
 	ctx := context.Background()

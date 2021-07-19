@@ -5,7 +5,7 @@ import (
 )
 
 func TestQueueBasics(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 
 	queue := NewQueue(cli, "/queue")

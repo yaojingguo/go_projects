@@ -1,4 +1,3 @@
-// Code adapted from https://github.com/etcd-io/etcd/blob/master/contrib/recipes/client.go
 // Copyright 2016 The etcd Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -17,9 +16,14 @@ package kv
 import (
 	"context"
 	"errors"
+	"fmt"
+	"go.etcd.io/etcd/client/v3/concurrency"
+	"testing"
+	"time"
+	"log"
 
-	v3 "go.etcd.io/etcd/client/v3"
 	spb "go.etcd.io/etcd/api/v3/mvccpb"
+	v3 "go.etcd.io/etcd/client/v3"
 )
 
 var (
@@ -28,6 +32,37 @@ var (
 	ErrTooManyClients = errors.New("too many clients")
 	ErrNoWatcher      = errors.New("no watcher channel")
 )
+var (
+	endPoints   = []string{"localhost:2379"}
+	dialTimeout = 1 * time.Second
+
+)
+
+func NewClient() *v3.Client {
+	cli, err := v3.New(v3.Config{
+		Endpoints:   endPoints,
+		DialTimeout: dialTimeout,
+	})
+	if err != nil {
+		log.Fatal(err)
+	}
+	return cli
+}
+
+func NewSession(t *testing.T) (cli *v3.Client, session *concurrency.Session) {
+	cli, err := v3.New(v3.Config{
+		Endpoints:   endPoints,
+		DialTimeout: dialTimeout,
+	})
+	if err != nil {
+		t.Fatal(err)
+	}
+	session, err = concurrency.NewSession(cli)
+	if err != nil {
+		t.Fatal(err)
+	}
+	return
+}
 
 // deleteRevKey deletes a key by revision, returning false if key is missing
 func deleteRevKey(kv v3.KV, key string, rev int64) (bool, error) {
@@ -52,5 +87,18 @@ func claimFirstKey(kv v3.KV, kvs []*spb.KeyValue) (*spb.KeyValue, error) {
 		}
 	}
 	return nil, nil
+}
+
+func Get(context context.Context, cli *v3.Client, key string) ([]byte, error) {
+	defer cli.Close()
+
+	response, err := cli.Get(context, key)
+	if err != nil {
+		return nil, err
+	}
+	if response.Count != 1 {
+		return nil, fmt.Errorf("return %d key values", response.Count)
+	}
+	return response.Kvs[0].Value, nil
 }
 

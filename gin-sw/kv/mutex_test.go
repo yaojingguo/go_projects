@@ -9,7 +9,7 @@ import (
 )
 
 func TestMutexBasics(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 
 	// Create two separate sessions for lock competition

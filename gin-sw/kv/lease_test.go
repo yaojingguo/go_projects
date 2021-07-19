@@ -9,7 +9,7 @@ import (
 )
 
 func TestLeaseGrant(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 	key := "TestLeaseGrant"
 
@@ -32,7 +32,7 @@ func TestLeaseGrant(t *testing.T) {
 }
 
 func TestLeaseRevoke(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 	key := "TestLeaseRevoke"
 	ctx := context.Background()
@@ -62,7 +62,7 @@ func TestLeaseRevoke(t *testing.T) {
 }
 
 func TestLeaseWithKeepAlive(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 	key := "TestLeaseWithKeepAlive"
 	ctx := context.Background()
@@ -94,7 +94,7 @@ func TestLeaseWithKeepAlive(t *testing.T) {
 }
 
 func TestLeaseWithKeepAliveOnce(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 	key := "TestLeaseWithKeepAliveOnce"
 	ctx := context.Background()

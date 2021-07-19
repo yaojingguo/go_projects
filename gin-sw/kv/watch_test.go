@@ -12,7 +12,7 @@ var end = []byte("end")
 // After start the test, run:
 // 	etcdctl put TestOneWatch 1
 func TestOneWatch(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 	ctx, cancel := context.WithCancel(context.Background())
 
@@ -27,7 +27,7 @@ func TestOneWatch(t *testing.T) {
 // 	etcdctl put TestTwoWatches1 1
 // 	etcdctl put TestTwoWatches2 2
 func TestTwoWatches(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	ctx, cancel := context.WithCancel(context.Background())
 
 	keys := []string{"TestTwoWatches1", "TestTwoWatches2"}
@@ -52,7 +52,7 @@ func TestTwoWatches(t *testing.T) {
 }
 
 func TestWatchPast(t *testing.T) {
-	cli := newClient(t)
+	cli := NewClient()
 	defer cli.Close()
 
 	key := "TestWatchPast"

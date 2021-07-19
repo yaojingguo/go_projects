@@ -1,4 +1,3 @@
-// Adapted from https://github.com/etcd-io/etcd/blob/master/clientv3/concurrency/mutex.go
 // Copyright 2016 The etcd Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +18,7 @@ import (
 	"fmt"
 	v3 "go.etcd.io/etcd/client/v3"
 	"go.etcd.io/etcd/client/v3/concurrency"
-	pb "github.com/coreos/etcd/etcdserver/etcdserverpb"
+	pb "go.etcd.io/etcd/api/v3/etcdserverpb"
 )
 
 type Mutex struct {

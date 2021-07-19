@@ -1,4 +1,3 @@
-// Adapted from https://github.com/etcd-io/etcd/blob/master/contrib/recipes/key.go
 // Copyright 2016 The etcd Authors
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +22,7 @@ import (
 
 	v3 "go.etcd.io/etcd/client/v3"
 	"go.etcd.io/etcd/client/v3/concurrency"
-	pb "github.com/coreos/etcd/etcdserver/etcdserverpb"
+	pb "go.etcd.io/etcd/api/v3/etcdserverpb"
 )
 
 // RemoteKV is a key/revision pair created by the client and stored on etcd

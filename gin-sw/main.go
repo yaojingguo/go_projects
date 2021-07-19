@@ -5,14 +5,17 @@ import (
 	"fmt"
 	"github.com/SkyAPM/go2sky"
 	"github.com/SkyAPM/go2sky/reporter"
-
 	"log"
+	"yao/gin-sw/v2/kv"
 
+	v3 "github.com/SkyAPM/go2sky-plugins/gin/v3"
 	zapplugin "github.com/SkyAPM/go2sky-plugins/zap"
 	"go.uber.org/zap"
 
 	"github.com/gin-gonic/gin"
 )
+
+var zapLog *zap.SugaredLogger
 
 var tracer *go2sky.Tracer
 func main() {
@@ -29,13 +32,30 @@ func main() {
 	}
 
 	r := gin.Default()
-	// r.Use(v3.Middleware(r, tracer))
+	r.Use(v3.Middleware(r, tracer))
 
 	r.GET("/ping", func(c *gin.Context) {
 		ctx := c.Request.Context()
 		one(ctx)
 		c.JSON(200, gin.H{
 			"message": "pong",
+		})
+	})
+
+	r.GET("/etcd", func(c *gin.Context) {
+		ctx := c.Request.Context()
+		cli := kv.NewClient()
+		defer cli.Close()
+		val, err := kv.Get(ctx, cli, "TestPut")
+		if err != nil {
+			c.JSON(500, gin.H{
+				"message": "interval error",
+			})
+		}
+		fmt.Println(val)
+		zapLog.Infof("val: ", val)
+		c.JSON(200, gin.H{
+			"no": val,
 		})
 	})
 
@@ -69,4 +89,12 @@ func two(ctx context.Context) {
 
 func three(ctx context.Context) {
 	fmt.Println("three func")
+}
+
+func init() {
+	logger, err := zap.NewDevelopment()
+	if err != nil {
+		log.Fatal(err)
+	}
+	zapLog = logger.Sugar()
 }
