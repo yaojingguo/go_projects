@@ -1,18 +1,17 @@
 package main
 
-
 import (
-	"log"
-	"time"
-
 	"github.com/SkyAPM/go2sky"
 	"github.com/SkyAPM/go2sky-plugins/resty"
 	"github.com/SkyAPM/go2sky/reporter"
+	"log"
+	"time"
 )
 
 func main() {
 	// Use gRPC reporter for production
-	re, err := reporter.NewGRPCReporter("127.0.0.1:11800")
+	// re, err := reporter.NewGRPCReporter("127.0.0.1:11800")
+	re, err := reporter.NewLogReporter()
 	if err != nil {
 		log.Fatalf("new reporter error %v \n", err)
 	}
