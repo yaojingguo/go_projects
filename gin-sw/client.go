@@ -12,28 +12,27 @@ import (
 
 func main() {
 	first()
-	// second()
 }
 
 func first() {
-	// re, err := reporter.NewLogReporter()
-	re, err := reporter.NewGRPCReporter("127.0.0.1:11800")
+	re, err := reporter.NewLogReporter()
 	if err != nil {
-		log.Fatalf("new reporter error %v \n", err)
+		log.Fatalf("new reporter error: %v", err)
 	}
 	defer re.Close()
 
-	tracer, err := go2sky.NewTracer("gin-server", go2sky.WithReporter(re))
+	tracer, err := go2sky.NewTracer("test", go2sky.WithReporter(re))
 	if err != nil {
-		log.Fatalf("create tracer error %v \n", err)
+		log.Fatalf("create tracer error: %v", err)
 	}
 
 	ctx := context.Background()
-	span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName("first"))
+	span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName("second"))
 	span.End()
 
 	// time.Sleep(1 * time.Second)
 }
+// re, err := reporter.NewGRPCReporter("127.0.0.1:11800")
 
 func second() {
 	// Use gRPC reporter for production
