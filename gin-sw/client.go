@@ -1,6 +1,7 @@
 package main
 
 import (
+	"context"
 	"github.com/SkyAPM/go2sky"
 	"github.com/SkyAPM/go2sky-plugins/resty"
 	"github.com/SkyAPM/go2sky/reporter"
@@ -8,7 +9,33 @@ import (
 	"time"
 )
 
+
 func main() {
+	first()
+	// second()
+}
+
+func first() {
+	// re, err := reporter.NewLogReporter()
+	re, err := reporter.NewGRPCReporter("127.0.0.1:11800")
+	if err != nil {
+		log.Fatalf("new reporter error %v \n", err)
+	}
+	defer re.Close()
+
+	tracer, err := go2sky.NewTracer("gin-server", go2sky.WithReporter(re))
+	if err != nil {
+		log.Fatalf("create tracer error %v \n", err)
+	}
+
+	ctx := context.Background()
+	span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName("first"))
+	span.End()
+
+	// time.Sleep(1 * time.Second)
+}
+
+func second() {
 	// Use gRPC reporter for production
 	// re, err := reporter.NewGRPCReporter("127.0.0.1:11800")
 	re, err := reporter.NewLogReporter()
