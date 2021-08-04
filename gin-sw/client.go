@@ -30,7 +30,7 @@ func first() {
 	span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName("second"))
 	span.End()
 
-	// time.Sleep(1 * time.Second)
+	time.Sleep(1 * time.Second)
 }
 // re, err := reporter.NewGRPCReporter("127.0.0.1:11800")
 
