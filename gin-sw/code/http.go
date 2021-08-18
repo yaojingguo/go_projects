@@ -16,16 +16,16 @@ func init() {
 
 func httpGet(url string) {
 	req, _ := http.NewRequest("GET", url, nil)
-	// req.Close = true
+	req.Close = true
 
 	var start time.Time
 	trace := &httptrace.ClientTrace{
 		GotConn: func(connInfo httptrace.GotConnInfo) {
 			fmt.Printf("Got Conn: %+v\n", connInfo)
 		},
-		DNSDone: func(dnsInfo httptrace.DNSDoneInfo) {
-			fmt.Printf("DNS Info: %+v\n", dnsInfo)
-		},
+		// DNSDone: func(dnsInfo httptrace.DNSDoneInfo) {
+		// 	fmt.Printf("DNS Info: %+v\n", dnsInfo)
+		// },
 		TLSHandshakeStart: func() {
 			start = time.Now()
 			log.Print("TLS handshake started")
