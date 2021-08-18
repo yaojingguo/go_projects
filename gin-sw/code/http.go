@@ -16,6 +16,7 @@ func init() {
 
 func httpGet(url string) {
 	req, _ := http.NewRequest("GET", url, nil)
+	// req.Close = true
 
 	var start time.Time
 	trace := &httptrace.ClientTrace{
