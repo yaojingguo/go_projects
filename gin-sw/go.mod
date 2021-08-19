@@ -14,4 +14,3 @@ require (
 	go.uber.org/zap v1.18.1
 )
 
-replace github.com/SkyAPM/go2sky v1.1.0 => ./go2sky
