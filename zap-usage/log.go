@@ -1,9 +1,10 @@
 package main
 
 import (
-	"go.uber.org/zap"
-	"time"
 	"fmt"
+	"time"
+
+	"go.uber.org/zap"
 )
 
 func sugar() {
@@ -36,6 +37,6 @@ func performant() {
 }
 
 func main() {
-	sugar()
+	// sugar()
 	performant()
 }
