@@ -7,6 +7,9 @@ import (
 )
 
 func TestOne(t *testing.T) {
-	data := []byte("These pretzels are making me thirsty.")
-	fmt.Printf("%x", md5.Sum(data))
+	data := []byte("The quick brown fox jumps over the lazy dog")
+	hashBytes := md5.Sum(data)
+	fmt.Println(len(hashBytes))
+	hashStr := fmt.Sprintf("%x", hashBytes)
+	fmt.Println(hashStr)
 }
