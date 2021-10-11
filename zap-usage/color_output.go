@@ -6,8 +6,11 @@ import (
 )
 
 func main() {
+	encoderConfig := zap.NewDevelopmentEncoderConfig()
+	encoderConfig.EncodeTime = zapcore.RFC3339TimeEncoder
 	config := zap.NewDevelopmentConfig()
-	config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
+	// config.EncoderConfig = encoderConfig
+	// config.EncoderConfig.EncodeLevel = zapcore.CapitalColorLevelEncoder
 	logger, _ := config.Build()
 	defer logger.Sync()
 

@@ -37,6 +37,6 @@ func performant() {
 }
 
 func main() {
-	// sugar()
+	sugar()
 	performant()
 }

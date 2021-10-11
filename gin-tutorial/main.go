@@ -27,6 +27,11 @@ func main() {
 	router.GET("/albums/:id", getAlbumByID)
 	router.POST("/albums", postAlbums)
 
+	router.GET("/welcome", func(c *gin.Context) {
+		name := c.Query("name")
+		c.IndentedJSON(http.StatusOK, name)
+	})
+
 	router.Run("localhost:8080")
 }
 
