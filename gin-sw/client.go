@@ -15,7 +15,8 @@ func main() {
 }
 
 func first() {
-	re, err := reporter.NewLogReporter()
+	re, err := reporter.NewGRPCReporter("localhost:11800")
+	//re, err := reporter.NewLogReporter()
 	if err != nil {
 		log.Fatalf("new reporter error: %v", err)
 	}
@@ -28,11 +29,13 @@ func first() {
 
 	ctx := context.Background()
 	span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName("second"))
+	span.Tag("uid", "123")
+	span.Tag("broker", "xdf")
+	span.Tag("http.method", "GET")
 	span.End()
 
 	time.Sleep(1 * time.Second)
 }
-// re, err := reporter.NewGRPCReporter("127.0.0.1:11800")
 
 func second() {
 	// Use gRPC reporter for production
