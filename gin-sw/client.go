@@ -28,7 +28,7 @@ func first() {
 	}
 
 	ctx := context.Background()
-	span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName("four"))
+	span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName("nine"))
 	span.Tag("uid", "567")
 	span.Tag("device_type", "win")
 	span.End()
