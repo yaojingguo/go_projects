@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"fmt"
 	"github.com/SkyAPM/go2sky"
 	"github.com/SkyAPM/go2sky-plugins/resty"
 	"github.com/SkyAPM/go2sky/reporter"
@@ -26,7 +27,7 @@ func main() {
 	if err != nil {
 		log.Fatalf("create tracer error: %v", err)
 	}
-	//first(tracer)
+	// first(tracer)
 	many(tracer)
 	time.Sleep(1 * time.Second)
 }
@@ -41,8 +42,8 @@ func first(tracer *go2sky.Tracer) {
 func many(tracer *go2sky.Tracer) {
 	ctx := context.Background()
 	for i := 1; i <= 10; i++ {
-		span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName("span-" + i))
-		span.Tag("lang_type", "java")
+		opName := fmt.Sprintf("span-%d", i)
+		span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName(opName))
 		span.End()
 	}
 }
