@@ -12,10 +12,6 @@ import (
 var tracer *go2sky.Tracer
 
 func main() {
-	first()
-}
-
-func init() {
 	var err error
 	var re go2sky.Reporter
 
@@ -30,15 +26,17 @@ func init() {
 	if err != nil {
 		log.Fatalf("create tracer error: %v", err)
 	}
+	first(tracer)
+	time.Sleep(1 * time.Second)
 }
 
-func first() {
+func first(tracer *go2sky.Tracer) {
 	ctx := context.Background()
 	span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName("six"))
 	span.Tag("lang_type", "java")
 	span.End()
 
-	time.Sleep(1 * time.Second)
+
 }
 
 func many() {
