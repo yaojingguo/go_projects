@@ -9,30 +9,43 @@ import (
 	"time"
 )
 
+var tracer *go2sky.Tracer
 
 func main() {
 	first()
 }
 
-func first() {
-	re, err := reporter.NewGRPCReporter("localhost:11800")
+func init() {
+	var err error
+	var re go2sky.Reporter
+
+	re, err = reporter.NewGRPCReporter("localhost:11800")
 	//re, err := reporter.NewLogReporter()
 	if err != nil {
 		log.Fatalf("new reporter error: %v", err)
 	}
 	defer re.Close()
 
-	tracer, err := go2sky.NewTracer("test", go2sky.WithReporter(re))
+	tracer, err = go2sky.NewTracer("test", go2sky.WithReporter(re))
 	if err != nil {
 		log.Fatalf("create tracer error: %v", err)
 	}
+}
 
+func first() {
 	ctx := context.Background()
 	span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName("six"))
 	span.Tag("lang_type", "java")
 	span.End()
 
 	time.Sleep(1 * time.Second)
+}
+
+func many() {
+	ctx := context.Background()
+	span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName("six"))
+	span.Tag("lang_type", "java")
+	span.End()
 }
 
 func second() {
