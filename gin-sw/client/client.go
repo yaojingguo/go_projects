@@ -26,7 +26,8 @@ func main() {
 	if err != nil {
 		log.Fatalf("create tracer error: %v", err)
 	}
-	first(tracer)
+	//first(tracer)
+	many(tracer)
 	time.Sleep(1 * time.Second)
 }
 
@@ -37,11 +38,13 @@ func first(tracer *go2sky.Tracer) {
 	span.End()
 }
 
-func many() {
+func many(tracer *go2sky.Tracer) {
 	ctx := context.Background()
-	span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName("six"))
-	span.Tag("lang_type", "java")
-	span.End()
+	for i := 1; i <= 10; i++ {
+		span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName("span-" + i))
+		span.Tag("lang_type", "java")
+		span.End()
+	}
 }
 
 func second() {
