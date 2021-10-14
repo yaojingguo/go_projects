@@ -28,15 +28,12 @@ func first() {
 	}
 
 	ctx := context.Background()
-	span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName("nine"))
-	span.Tag("uid", "567")
-	span.Tag("device_type", "win")
+	span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName("six"))
+	span.Tag("lang_type", "java")
 	span.End()
 
 	time.Sleep(1 * time.Second)
 }
-
-
 
 func second() {
 	// Use gRPC reporter for production
