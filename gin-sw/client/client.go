@@ -35,8 +35,6 @@ func first(tracer *go2sky.Tracer) {
 	span, _, _ := tracer.CreateLocalSpan(ctx, go2sky.WithOperationName("six"))
 	span.Tag("lang_type", "java")
 	span.End()
-
-
 }
 
 func many() {
