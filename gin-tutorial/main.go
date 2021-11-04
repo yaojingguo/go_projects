@@ -4,6 +4,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 )
 
 // album represents data about a record album.
@@ -32,7 +33,9 @@ func main() {
 		c.IndentedJSON(http.StatusOK, name)
 	})
 
-	router.Run("localhost:8080")
+	router.GET("/metrics", gin.WrapH(promhttp.Handler()))
+	
+	router.Run("localhost:2112")
 }
 
 // getAlbums responds with the list of all albums as JSON.
